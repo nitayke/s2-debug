@@ -1,0 +1,50 @@
+*{
+    direction: rtl;
+    box-sizing: border-box;
+    outline: none;
+    scroll-behavior: smooth;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+.all-site{
+    margin: 0;
+    text-align: center;
+}
+
+.concepts-section{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.concepts-header{
+    margin: 0 0 1rem 0;
+    width: 100%;
+    position: sticky;
+    top: 0;
+    color: #fff;
+    background-color: #333;
+    z-index: 1000;
+}
+
+.concepts-comtainer{
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 1rem;
+    width: 60%;
+}
+
+.concept{
+    padding: .5rem 1rem;
+    font-size: 1.2rem;
+    background-color: #fff;
+    border: 2px solid #333;
+    border-radius: .5rem;
+    cursor: pointer;
+    transition: 300ms all ease;
+}
+
+.active{
+    border: 2px solid green;
+    transform: scale(.92);
+}
