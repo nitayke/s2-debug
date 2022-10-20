@@ -20,17 +20,27 @@
             <h3>
                 רוצה לדעת באיזו ישיבה כדאי לך לבדוק?
             </h3>
-            <a href="#" class="shvush-button" id="shvush">
+            <button class="shvush-student-button" id="shvush" onclick="openConceptsSection()">
                 לחץ כאן כדי לגלות
-            </a>
+            </button>
             <h3>
                  רוצה לדעת האם אתה מתאים לישיבה שאתה לומד בה?<br>
             </h3>
-            <a href="#" class="student-button" id="student">
+            <button class="shvush-student-button" id="student">
                 לחץ כאן כדי לגלות
-            </a>
+            </button>
         </header>
 
+        <!-- <label for="yeshiva">
+            כתוב את שם הישיבה בה אתה לומד ובחר אותה מהרשימה
+        </label>
+        <input type="text" name="yeshiva" list="yeshivot" placeholder="באיזו ישיבה אתה לומד?">
+        <datalist id="yeshivot" role="listbox">
+            <option>קרית שמונה</option>
+            <option>ירוחם</option>
+            <option>מעלה אדומים</option>
+            <option>הגוש</option>
+          </datalist> -->
     </div>
 
     <!-- Concepts Section -->
@@ -84,9 +94,33 @@
             <button class="concept">גקמן</button>
         </div>
 
-        <button class="submit-concepts">שלח</button>
+        <button class="submit-concepts button-styling" onclick="submitConcepts()">שלח</button>
         
     </main>
+
+    <!-- Result Section -->
+
+    <div class="result-section section">
+        <h1 class="smallerH1">הישיבות המומלצות עבורך הן:</h1>
+        <h2>#1 - קרית שמונה (88% התאמה)</h2>
+        <button class="start-over button-styling" onclick="openConceptsSection()">
+            התחל מחדש
+        </button>
+        <a href="https://shvushon.github.io/shvushon" class="shvush-student-button">
+            נסה את שבושון 2.0
+        </a>
+        <p>
+            <b>יוצרים:</b>
+            <br>
+            נתאי קסנר
+            <br>
+            נדב אילני
+            <br>
+            אייל הלמון
+
+        </p>
+    </div>
+
 </div>
 
     <script src="style-code.js"></script>
