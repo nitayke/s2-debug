@@ -18,35 +18,65 @@
             <h1>שבושון</h1>
             <h2>ברוכים הבאים לשבושון 4.0</h2>
             <h3>
-                רוצה לדעת באיזו ישיבה כדאי לך לבדוק?
+                <span class="bigger-greener">שבוש</span>, רוצה לדעת באיזו ישיבה כדאי לך לבדוק?
             </h3>
-            <button class="shvush-student-button" id="shvush" onclick="openConceptsSection()">
+            <button class="link-styling" id="shvush" onclick="openConceptsSection()">
                 לחץ כאן כדי לגלות
             </button>
             <h3>
-                 רוצה לדעת האם אתה מתאים לישיבה שאתה לומד בה?<br>
+                <span class="bigger-greener">בייניש</span>, רוצה לדעת האם אתה מתאים לישיבה שלך?<br>
             </h3>
-            <button class="shvush-student-button" id="student">
+            <button class="link-styling" id="student" onclick="openBeynishStartSection()">
                 לחץ כאן כדי לגלות
             </button>
         </header>
+    </div>
 
-        <!-- <label for="yeshiva">
-            כתוב את שם הישיבה בה אתה לומד ובחר אותה מהרשימה
-        </label>
-        <input type="text" name="yeshiva" list="yeshivot" placeholder="באיזו ישיבה אתה לומד?">
-        <datalist id="yeshivot" role="listbox">
-            <option>קרית שמונה</option>
-            <option>ירוחם</option>
-            <option>מעלה אדומים</option>
-            <option>הגוש</option>
-          </datalist> -->
+    <div class="beynish-start-section section">
+
+        <header class="sub-header">
+            <h1>שבושון</h1>
+        </header>
+
+        <h3>בייניש יקר, לפני שנתחיל בשאלון:</h3>
+
+        <div class="beynish-form">
+            <label for="yeshiva">באיזו ישיבה אתה לומד?</label>
+            <div class="autocomplete">
+                <input id="autocomplete-input" 
+                type="text" name="yeshiva" autocomplete="off" 
+                placeholder="התחל לכתוב ובחר ישיבה מהרשימה..."
+                required>
+            </div>
+
+            <label for="shioor">איזה שיעור אתה?</label>
+            <select name="shioor" id="shioor" required>
+                <option value="" disabled selected hidden>בחר מהרשימה</option>
+                <option>א'</option>
+                <option>ב'</option>
+                <option>ג'</option>
+                <option>ד'</option>
+                <option>ה'</option>
+                <option>ו' ומעלה</option>
+            </select>
+
+            <div class="beynish-btns">
+                <button class="link-styling" onclick="openStartSection()">התבלבלתי אני לא <br> בייניש בכלל</button>
+                <button onclick="validateForm()" 
+                class="button-styling beynish-start-btn">
+                התחל!
+            </button>
+        </div>
+    </div>
     </div>
 
     <!-- Concepts Section -->
     <main class="concepts-section section">
 
-        <h4 class="concepts-header">בחר את המושגים שאתה מכיר</h2>
+        <header class="sub-header">
+        <h1>שבושון</h1>
+        <h4>בחר את המושגים שאתה מכיר</h4>
+        </header>
 
         <div class="concepts-comtainer">
             <button class="concept">דואה ליפה</button>
