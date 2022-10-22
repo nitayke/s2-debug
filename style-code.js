@@ -55,7 +55,7 @@ function autocomplete(inp, arr) {
   var currentFocus;
   /*execute a function when someone writes in the text field:*/
   inp.addEventListener("input", function(e) {
-      var a, b, i, val = this.value;
+      var a, b, i, bold, val = this.value;
       /*close any already open lists of autocompleted values*/
       closeAllLists();
       if (!val) { return false;}
@@ -69,12 +69,14 @@ function autocomplete(inp, arr) {
       /*for each item in the array...*/
       for (i = 0; i < arr.length; i++) {
         /*check if the item starts with the same letters as the text field value:*/
-        if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+        if (arr[i].toUpperCase().includes(val.toUpperCase())) {
+          bold = getIncludeLetters(arr[i].toUpperCase(), val.toUpperCase());
           /*create a DIV element for each matching element:*/
           b = document.createElement("DIV");
           /*make the matching letters bold:*/
-          b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
-          b.innerHTML += arr[i].substr(val.length);
+          b.innerHTML = arr[i].substr(0, bold)
+          b.innerHTML += "<strong>" + arr[i].substr(bold, val.length) + "</strong>";
+          b.innerHTML += arr[i].substr(parseInt(bold) + parseInt(val.length));
           /*insert a input field that will hold the current array item's value:*/
           b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
           /*execute a function when someone clicks on the item value (DIV element):*/
@@ -125,6 +127,7 @@ function autocomplete(inp, arr) {
     if (currentFocus < 0) currentFocus = (x.length - 1);
     /*add class "autocomplete-active":*/
     x[currentFocus].classList.add("autocomplete-active");
+    inp.value = x[currentFocus].innerText;
   }
   function removeActive(x) {
     /*a function to remove the "active" class from all autocomplete items:*/
@@ -146,6 +149,17 @@ function autocomplete(inp, arr) {
 document.addEventListener("click", function (e) {
     closeAllLists(e.target);
 });
+}
+
+function getIncludeLetters(str, s) {
+  for (var i = 0; i < str.length - s.length + 1; i++) {
+    if (str.substring(i, s.length + i) == s) {
+      console.log(i)
+      return i + " ";
+    }
+  }
+
+  return 0;
 }
 
 let yeshivot = ['קרית שמונה', 'מעלה אדומים', 'ירוחם', 'ירוגם',]
