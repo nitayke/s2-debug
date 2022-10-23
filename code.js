@@ -81,8 +81,8 @@ window.submitConcepts = async () => {
 
   if (shioor.value != "") // change DB
   {
-    // 1 if "0", MAX_RESPONSES if "1"
-    var duplicate = (shioor.value == "1") * (MAX_REPONSES - 1) + 1;
+    // 1 if "1", MAX_RESPONSES if "0" (I guess there will be more ktanim than gdolim)
+    var duplicate = (shioor.value == "0") * (MAX_REPONSES - 1) + 1;
     var res;
     const qRef = ref(getDatabase(), yeshiva.value);
     const snapshot = await get(qRef);
