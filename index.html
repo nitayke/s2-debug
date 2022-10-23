@@ -6,9 +6,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta property="og:description" content="שמיניסט מבולבל, בייניש/מכיניסט סקרן או סתם איזו אחת שבאה לבדוק איפה כדאי לה לחפש שידוך,
-    ברוכים הבאים לשבושון 2!">
-    <meta property="og:url" content="https://shvushon.github.io/shvushon2/">
+    <meta property="og:description" content="ספר לנו איזה סלבס אתה מכיר ונספר לך איזה ישיבה/מכינה מתאימה לך">
     <meta property="og:image" itemprop="image" content="https://raw.githubusercontent.com/shvushon/shvushon2/main/shvushon2.jpg">
 
     <link rel="stylesheet" href="style.css">
@@ -27,7 +25,7 @@
             <h2>ברוכים הבאים לשבושון 2</h2>
             <p>במסך הבא נציג בפניכם רשימת דמויות ומושגים. בחרו את אלה שאתם מכירים ואנחנו נציג לכם אילו ישיבות או מכינות מתאימות לכם על סמך בחירותיכם.</p>
             <h3>
-                <span class="bigger-greener">שבוש יקר</span>,
+                <span class="bigger-greener">שבוש יקר</span> (או סתם אדם מהרחוב),
                 <br>
                 רוצה לדעת באיזו ישיבה או מכינה כדאי לך לבדוק?
             </h3>
@@ -36,7 +34,8 @@
             </button>
             
             <h3>
-                <span class="bigger-greener">בייניש</span> או <span class="bigger-greener">מכיניסט</span>,
+                <span class="bigger-greener">בייניש</span> או <span class="bigger-greener">מכיניסט</span>
+                 או <span class="bigger-greener">בוגר</span>,
                 <br>
                 רוצה לדעת אם בחרת נכון?
             </h3>
@@ -52,7 +51,7 @@
             <h1>שבושון</h1>
         </header>
 
-        <h3>בייניש/מכיניסט יקר, לפני שנתחיל בשאלון:</h3>
+        <h3>בייניש/מכיניסט/בוגר יקר, לפני שנתחיל בשאלון:</h3>
 
         <div class="beynish-form">
             <label for="yeshiva">באיזה מוסד אתה לומד?</label>
@@ -166,7 +165,9 @@
 
     <div class="result-section section">
         <h1 class="smallerH1">הישיבות המומלצות עבורך הן:</h1>
-        <h2>#1 - קרית שמונה (88% התאמה)</h2>
+        <h2 id="res1"></h2>
+        <h2 id="res2"></h2>
+        <h2 id="res3"></h2>
         <button class="start-over button-styling" onclick="openConceptsSection()">
             התחל מחדש
         </button>
