@@ -67,6 +67,41 @@ document.querySelectorAll('.concept').forEach(item => {
   })
   
 
+function get_tmp_grade(term, big_count, small_count, big_know, small_know, is_big)
+{
+  // if there are only small responses, we use only them,
+  // it doesn't matter if he's big or small
+  if (big_count === 0)
+  {
+    if (term)
+      return small_know/small_count
+    else
+      return 1 - small_know/small_count
+  }
+  // איך אומרים, העדפתי שזה יהיה קריא מאשר שזה יהיה קצר
+  else if (small_count === 0)
+  {
+    if (term)
+      return big_know/big_count
+    else
+      return 1 - big_know/big_count
+  }
+  else if (is_big)
+  {
+    if (term)
+      return ((big_know/big_count) * 2 + (small_know/small_count)) / 3;
+    else
+      return ((1 - big_know/big_count) * 2 + (1 - small_know/small_count)) / 3;
+  }
+  else
+  {
+    if (term)
+      return ((big_know/big_count) + (small_know/small_count) * 2) / 3;
+    else
+      return ((1 - big_know/big_count) + (1 - small_know/small_count) * 2) / 3;
+  }
+}
+
 // All the DB things are here
 window.submitConcepts = async () => {
   conceptsSection.classList.add('hidden');
@@ -88,51 +123,28 @@ window.submitConcepts = async () => {
 
   for (var key in val) // in yeshivot
   {
-    var big_count = val[key][0] % MAX_REPONSES;
-    var small_count = Math.floor(val[key][0] / MAX_REPONSES);
+    var musag = val[key][0];
+    var big_count = musag % MAX_REPONSES;
+    var small_count = Math.floor(musag / MAX_REPONSES);
     const is_big = shioor.value === "1";
     var grade = 0;
     musagim_length = val[key].length - 1;
 
     for (var i = 1; i < musagim_length + 1; i++) // musagim
     {
-      const musag = val[key][i];
-      const big_know = musag % MAX_REPONSES;
-      const small_know = Math.floor(musag / MAX_REPONSES);
-      var tmp_grade = 0;
+      musag = val[key][i]
 
-      if (big_count === 0 && small_count === 0)
-        console.log('error!');
-      else if (big_count === 0)
-        big_count = 1;
-      else if (small_count === 0)
-        small_count = 1;
-
-      if (is_big)
-      {
-        if (terms[i-1])
-          tmp_grade = ((big_know/big_count) * 2 + (small_know/small_count)) / 3;
-        else
-          tmp_grade = ((1 - big_know/big_count) * 2 + (1 - small_know/small_count)) / 3;
-      }
-      else
-      {
-        if (terms[i-1])
-          tmp_grade = ((big_know/big_count) + (small_know/small_count) * 2) / 3;
-        else
-          tmp_grade = ((1 - big_know/big_count) + (1 - small_know/small_count) * 2) / 3;
-      }
-
-      grade += tmp_grade;      
+      grade += get_tmp_grade(terms[i-1], big_count, small_count, musag % MAX_REPONSES,
+        Math.floor(musag / MAX_REPONSES), is_big);      
     }
     grades[key] = (Math.sqrt(grade * (100/(musagim_length))) * 10).toFixed(2);
   }
 
-  console.log(grades);
 
   if (shioor.value != "" && !window.localStorage.getItem('done')) // change DB.
   {
     window.localStorage.setItem('done', 1);
+
     // 1 if "1", MAX_RESPONSES if "0" (I guess there will be more ktanim than gdolim)
     var duplicate = (shioor.value == "0") * (MAX_REPONSES - 1) + 1;
     var res;
@@ -163,10 +175,18 @@ window.submitConcepts = async () => {
   sortable.sort(function(a, b) {
       return b[1] - a[1];
   });
-  console.log(sortable);
+  
   for (var i = 0; i < 3; i++)
   {
     document.getElementById('res' + (i+1)).innerHTML = `#${i+1} - ${sortable[i][0]} (${sortable[i][1]}% התאמה)`
+  }
+  
+  // show percentage for his yeshiva
+  if (shioor.value !== "")
+  {
+    const percentage = document.getElementById('percentage');
+    percentage.hidden = false;
+    percentage.innerHTML += grades[shioor.value] + '%';
   }
 
   resultSection.classList.remove('hidden');
