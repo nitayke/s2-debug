@@ -47,17 +47,18 @@ h1 {
   text-shadow: -2px 2px 0px rgba(0, 0, 0, 0.2);
 }
 
-.start-section h1{
-  margin-bottom: 1rem;
-}
-
-.start-section h2{
-  margin: 0.5rem;
+.start-section  h2{
+  margin: .5rem 0;
+  font-weight: 900;
   color: #005e19;
 }
 
-h2, h3{
+h2{
   margin: 1rem 0 .5rem 0;
+}
+
+h3{
+  margin: 1rem 0 0 0;
 }
 
 p{
@@ -240,4 +241,61 @@ input:focus, select:focus{
 
 .link-styling:nth-child(1){
   font-size: .8rem;
+}
+
+.loader-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  touch-action: none;
+  pointer-events: none;
+  z-index: 999;
+}
+
+.loader {
+  position: fixed;
+  top: 25%;
+  z-index: 999;
+  border: 100px solid #06b936;
+  border-top: 1px solid transparent;
+  border-radius: 50%;
+  width: 30vh;
+  height: 30vh;
+  animation: spin 3s linear infinite;
+}
+
+.loader-text {
+  position: fixed;
+  top: 60%;
+  z-index: 999;
+  padding: 1rem;
+  text-align: center;
+  color: #06b936;
+  font-size: 1.2rem;
+  font-weight: 900;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.dark-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 99;
+  background: #000000af;
+  transition: 500ms ease-in-out;
 }

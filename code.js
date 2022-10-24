@@ -8,11 +8,16 @@ const resultSection = document.querySelector('.result-section');
 const yeshiva = document.getElementById('autocomplete-input')
 const shioor = document.getElementById('shioor')
 
+const loader = document.querySelector(".loader");
+const loaderText = document.querySelector(".loader-text");
+const darkScreen = document.querySelector(".dark-screen");
+
 //hide sections before load
 // startSection.classList.add('hidden');
 beynishStartSection.classList.add('hidden');
 conceptsSection.classList.add('hidden');
 resultSection.classList.add('hidden');
+// showLoader();
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.7/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.6.7/firebase-analytics.js";
@@ -58,6 +63,18 @@ window.openConceptsSection = () => {
   resultSection.classList.add('hidden');
 }
 
+function showLoader() {
+  loader.hidden = false;
+  loaderText.hidden = false;
+  darkScreen.hidden = false;
+}
+
+function hideLoader() {
+  loader.hidden = true;
+  loaderText.hidden = true;
+  darkScreen.hidden = true;
+}
+
 
 //choose concepts on click
 document.querySelectorAll('.concept').forEach(item => {
@@ -71,7 +88,7 @@ document.querySelectorAll('.concept').forEach(item => {
 window.submitConcepts = async () => {
   conceptsSection.classList.add('hidden');
 
-  // TODO: add loader
+  showLoader();
 
   var terms = [];
   
@@ -169,6 +186,7 @@ window.submitConcepts = async () => {
     document.getElementById('res' + (i+1)).innerHTML = `#${i+1} - ${sortable[i][0]} (${sortable[i][1]}% התאמה)`
   }
 
+  hideLoader();
   resultSection.classList.remove('hidden');
 }
 
@@ -183,7 +201,7 @@ function autocomplete(inp, arr) {
       /*close any already open lists of autocompleted values*/
       closeAllLists();
       if (!val) { return false;}
-      currentFocus = -1;
+      currentFocus = 0;
       /*create a DIV element that will contain the items (values):*/
       a = document.createElement("DIV");
       a.setAttribute("id", this.id + "autocomplete-list");
@@ -236,9 +254,9 @@ function autocomplete(inp, arr) {
       } else if (e.keyCode == 13) {
         /*If the ENTER key is pressed, prevent the form from being submitted,*/
         e.preventDefault();
-        if (currentFocus > -1) {
+        if (currentFocus > 0) {
           /*and simulate a click on the "active" item:*/
-          if (x) x[currentFocus].click();
+          if (x) x[currentFocus-1].click();
         }
       }
   });
@@ -247,11 +265,11 @@ function autocomplete(inp, arr) {
     if (!x) return false;
     /*start by removing the "active" class on all items:*/
     removeActive(x);
-    if (currentFocus >= x.length) currentFocus = 0;
-    if (currentFocus < 0) currentFocus = (x.length - 1);
+    if (currentFocus >= x.length) currentFocus = 1;
+    if (currentFocus < 1) currentFocus = (x.length - 1);
     /*add class "autocomplete-active":*/
-    x[currentFocus].classList.add("autocomplete-active");
-    inp.value = x[currentFocus].innerText;
+    x[currentFocus-1].classList.add("autocomplete-active");
+    inp.value = x[currentFocus-1].innerText;
   }
   function removeActive(x) {
     /*a function to remove the "active" class from all autocomplete items:*/
