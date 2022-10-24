@@ -8,13 +8,18 @@ const resultSection = document.querySelector('.result-section');
 const yeshiva = document.getElementById('autocomplete-input')
 const shioor = document.getElementById('shioor')
 
-const loader = document.querySelector(".loader");
+const loaderCircle = document.querySelector(".loader-circle");
+const loaderLine = document.querySelector(".loader-line");
+const loaderClock = document.querySelector(".loader-clock");
 const loaderText = document.querySelector(".loader-text");
 const darkScreen = document.querySelector(".dark-screen");
 
+const whatsappLink = document.querySelector('.whatsapp-link');
+let whatsappLinkText;
+
 //hide sections before load
-// startSection.classList.add('hidden');
-beynishStartSection.classList.add('hidden');
+startSection.classList.add('hidden');
+// beynishStartSection.classList.add('hidden');
 conceptsSection.classList.add('hidden');
 resultSection.classList.add('hidden');
 // showLoader();
@@ -57,6 +62,7 @@ window.openBeynishStartSection = () => {
 }
 
 window.openConceptsSection = () => {
+  document.querySelectorAll('.concept').forEach(item => item.classList.remove('active'))
   startSection.classList.add('hidden');
   beynishStartSection.classList.add('hidden');
   conceptsSection.classList.remove('hidden');
@@ -64,13 +70,17 @@ window.openConceptsSection = () => {
 }
 
 function showLoader() {
-  loader.hidden = false;
+  loaderCircle.hidden = false;
+  loaderLine.hidden = false;
+  loaderClock.hidden = false;
   loaderText.hidden = false;
   darkScreen.hidden = false;
 }
 
 function hideLoader() {
-  loader.hidden = true;
+  loaderCircle.hidden = true;
+  loaderLine.hidden = true;
+  loaderClock.hidden = true;
   loaderText.hidden = true;
   darkScreen.hidden = true;
 }
@@ -206,6 +216,20 @@ window.submitConcepts = async () => {
     percentage.innerHTML += grades[shioor.value] + '%';
   }
 
+  whatsappLinkText = 'https://wa.me?text='
+  whatsappLinkText += 'עשיתי את שאלון המושגים של שבושון 2 שאומר לי איזו ישיבה או מכינה מתאימה לי ואלה התוצאות שקיבלתי'
+  whatsappLinkText += '%0a'
+  whatsappLinkText += document.getElementById('res1').innerText;
+  whatsappLinkText += '%0a'
+  whatsappLinkText += document.getElementById('res2').innerText;
+  whatsappLinkText += '%0a'
+  whatsappLinkText += document.getElementById('res3').innerText;
+  whatsappLinkText += '%0a'
+  whatsappLinkText += 'נסו גם אתם את השאלון בקישור:'
+  whatsappLinkText += '%0a'
+  whatsappLinkText += 'https://nitayke.github.io/shvushon2-debug/'
+  whatsappLink.setAttribute('href', whatsappLinkText)
+
   hideLoader();
   resultSection.classList.remove('hidden');
 }
@@ -221,7 +245,7 @@ function autocomplete(inp, arr) {
       /*close any already open lists of autocompleted values*/
       closeAllLists();
       if (!val) { return false;}
-      currentFocus = 0;
+      currentFocus = -1;
       /*create a DIV element that will contain the items (values):*/
       a = document.createElement("DIV");
       a.setAttribute("id", this.id + "autocomplete-list");
@@ -274,9 +298,9 @@ function autocomplete(inp, arr) {
       } else if (e.keyCode == 13) {
         /*If the ENTER key is pressed, prevent the form from being submitted,*/
         e.preventDefault();
-        if (currentFocus > 0) {
+        if (currentFocus > -1) {
           /*and simulate a click on the "active" item:*/
-          if (x) x[currentFocus-1].click();
+          if (x) x[currentFocus].click();
         }
       }
   });
@@ -285,11 +309,11 @@ function autocomplete(inp, arr) {
     if (!x) return false;
     /*start by removing the "active" class on all items:*/
     removeActive(x);
-    if (currentFocus >= x.length) currentFocus = 1;
-    if (currentFocus < 1) currentFocus = (x.length - 1);
+    if (currentFocus >= x.length) currentFocus = 0;
+    if (currentFocus < 0) currentFocus = (x.length - 1);
     /*add class "autocomplete-active":*/
-    x[currentFocus-1].classList.add("autocomplete-active");
-    inp.value = x[currentFocus-1].innerText;
+    x[currentFocus].classList.add("autocomplete-active");
+    inp.value = x[currentFocus].innerText;
   }
   function removeActive(x) {
     /*a function to remove the "active" class from all autocomplete items:*/

@@ -37,9 +37,6 @@ body {
 }
 
 /* Start Section */
-.start-section, .result-section{
-  padding: 1rem;
-}
 
 h1 {
   margin: 0;
@@ -219,7 +216,21 @@ input:focus, select:focus{
     width: 60%;
 }
 
+img{
+  margin: 0;
+}
+
+.links-box{
+  margin-top: 1rem;
+  display: flex;
+  gap: 1rem;
+}
+
 /* All Page Styling */
+.section-padding{
+  padding: 0 1rem 1rem 1rem;
+}
+
 .bigger-greener{
   color: #005e19;
   font-size: 1.5rem;
@@ -239,7 +250,7 @@ input:focus, select:focus{
   cursor: pointer;
 }
 
-.link-styling:nth-child(1){
+.beynish-btns .link-styling{
   font-size: .8rem;
 }
 
@@ -257,16 +268,40 @@ input:focus, select:focus{
   z-index: 999;
 }
 
-.loader {
+.loader-circle {
+  position: fixed;
+  top: 25%;
+  background-color: #06b936;
+  z-index: 999;
+  border-radius: 50%;
+  width: 30vh;
+  height: 30vh;
+}
+
+.loader-line {
   position: fixed;
   top: 25%;
   z-index: 999;
-  border: 100px solid #06b936;
-  border-top: 1px solid transparent;
+  background-color: #06b936;
   border-radius: 50%;
   width: 30vh;
   height: 30vh;
   animation: spin 3s linear infinite;
+}
+
+.loader-clock {
+  position: relative;
+  top: 0;
+  left: 0;
+  right: 50%;
+  bottom: 50%;
+  z-index: 999;
+  background-color: #005e19;
+  border-radius: 80%;
+  border-bottom-left-radius: 20%;
+  border-bottom-right-radius: 20%;
+  width: 8px;
+  height: 15vh;
 }
 
 .loader-text {
@@ -276,7 +311,7 @@ input:focus, select:focus{
   padding: 1rem;
   text-align: center;
   color: #06b936;
-  font-size: 1.2rem;
+  font-size: 1.4rem;
   font-weight: 900;
 }
 

@@ -23,34 +23,38 @@
     <!-- Start Section -->
     <div class="start-section section">
         <header>
-            <h1>שבושון 2</h1>
-            <p><b>שמיניסט מבולבל, בייניש/מכיניסט סקרן או סתם איזו אחת שבאה לבדוק איפה כדאי לה לחפש שידוך</b></p>
-            <h2>ספרו לנו איזה סלבס אתם מכירים ונאמר לכם לאיזו ישיבה או מכינה אתם שייכים</h2>            
-            <p>במסך הבא נציג בפניכם רשימת דמויות ומושגים. בחרו את אלה שאתם מכירים ואנחנו נציג לכם אילו ישיבות או מכינות מתאימות לכם על סמך בחירותיכם.</p>
-            <h3>
-                <span class="bigger-greener">שבוש יקר</span>,
-                <br>
-                רוצה לדעת באיזו ישיבה או מכינה כדאי לך לבדוק?
-            </h3>
-            <button class="link-styling" id="shvush" onclick="openConceptsSection()">
-                לחץ כאן!
-            </button>
-            
-            <h3>
-                <span class="bigger-greener">בייניש</span> או <span class="bigger-greener">מכיניסט</span>,
-                <br>
-                רוצה לדעת אם בחרת נכון?
-            </h3>
-            <button class="link-styling" id="student" onclick="openBeynishStartSection()">
-                לחץ כאן!
-            </button>
+            <header class="sub-header">
+                <h1>שבושון 2</h1>
+            </header>
+            <div class="section-padding">
+                <p><b>שמיניסט מבולבל, בייניש/מכיניסט סקרן או סתם איזו אחת שבאה לבדוק איפה כדאי לה לחפש שידוך</b></p>
+                <h2>ספרו לנו איזה סלבס אתם מכירים ונאמר לכם לאיזו ישיבה או מכינה אתם שייכים</h2>            
+                <p>במסך הבא נציג בפניכם רשימת דמויות ומושגים. בחרו את אלה שאתם מכירים ואנחנו נציג לכם אילו ישיבות או מכינות מתאימות לכם על סמך בחירותיכם.</p>
+                <h3>
+                    <span class="bigger-greener">שבוש יקר</span>,
+                    <br>
+                    רוצה לדעת באיזו ישיבה או מכינה כדאי לך לבדוק?
+                </h3>
+                <button class="link-styling" id="shvush" onclick="openConceptsSection()">
+                    לחץ כאן!
+                </button>
+                
+                <h3>
+                    <span class="bigger-greener">בייניש</span> או <span class="bigger-greener">מכיניסט</span>,
+                    <br>
+                    רוצה לדעת אם בחרת נכון?
+                </h3>
+                <button class="link-styling" id="student" onclick="openBeynishStartSection()">
+                    לחץ כאן!
+                </button>
+            </div>
         </header>
     </div>
 
     <div class="beynish-start-section section">
 
         <header class="sub-header">
-            <h1>שבושון</h1>
+            <h1>שבושון 2</h1>
         </header>
 
         <h3>בייניש/מכיניסט יקר, לפני שנתחיל בשאלון:</h3>
@@ -89,7 +93,7 @@
     <main class="concepts-section section">
 
         <header class="sub-header">
-        <h1>שבושון</h1>
+        <h1>שבושון 2</h1>
         <h4>בחר את המושגים שאתה מכיר</h4>
         </header>
 
@@ -166,38 +170,51 @@
     <!-- Result Section -->
 
     <div class="result-section section">
-        <h1 class="smallerH1">הישיבות המומלצות עבורך הן:</h1>
-        <h2 id="res1"></h2>
-        <h2 id="res2"></h2>
-        <h2 id="res3"></h2>
-        <h1 id="percentage" hidden class="smallerH1">אחוזי ההתאמה לישיבתך הקדושה הם: </h1>
-        <button class="start-over button-styling" onclick="openConceptsSection()">
-            התחל מחדש
-        </button>
-        <a href="https://shvushon.github.io/shvushon" class="link-styling">
-            <img src="https://shvushon.github.io/shvushon/favicon.ico">
-            נסה את שבושון 1
-        </a>
-        <br>
-        <a href="https://wa.me?text=היי, כרגע הקישור של שבושון לשיתוף התוצאות לא עובד אז זה מה שזה שולח, בסדר? אבל אתה חבר שלי אז תיכנס לאתר שבושון, כדאי לך."
-        class="link-styling">
-        <i class="fa fa-whatsapp" style="font-size:36px;color:green"></i> שתף את התוצאות בוואצפ</a>
-        <p>
-            <b>יוצרים:</b>
-            <br>
-            נתאי קסנר
-            <br>
-            נדב אילני
-            <br>
-            אייל הלמון
+        <header class="sub-header">
+            <h1>שבושון 2</h1>
+        </header>
+        <div class="section-padding">
+            <h1 class="smallerH1">הישיבות המומלצות עבורך הן:</h1>
+            <h2 id="res1"></h2>
+            <h2 id="res2"></h2>
+            <h2 id="res3"></h2>
+            <h1 id="percentage" hidden class="smallerH1">אחוזי ההתאמה לישיבתך הקדושה הם: </h1>
+            <button class="start-over button-styling" onclick="openConceptsSection()">
+                התחל מחדש
+            </button>
+            <div class="links-box">
+                <a href="#"
+                class="link-styling whatsapp-link" target="_blank">
+                <i class="fa fa-whatsapp" style="font-size:36px;color:green"></i>
+                <br>
+                שתף את התוצאות בוואצפ
+                </a>
+                <a href="https://shvushon.github.io/shvushon" class="link-styling">
+                    <img width="36px" height="30.86px" src="https://shvushon.github.io/shvushon/favicon.ico">
+                    <br>
+                    נסה את שבושון 1
+                </a>
+            </div>
+            <p>
+                <b>יוצרים:</b>
+                <br>
+                נתאי קסנר
+                <br>
+                נדב אילני
+                <br>
+                אייל הלמון
 
-        </p>
+            </p>
+        </div>
     </div>
 
 </div>
 
 <div class="loader-container">
-    <div class="loader" hidden></div>
+    <div class="loader-circle" hidden></div>
+    <div class="loader-line" hidden>
+        <div class="loader-clock" hidden></div>
+    </div>
     <div class="loader-text" hidden>מערכת שבושון מתאימה לך ישיבה או מכינה, אנא המתן...</div>
   </div>
   <div class="dark-screen" hidden></div>
