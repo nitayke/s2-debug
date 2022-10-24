@@ -18,8 +18,8 @@ const whatsappLink = document.querySelector('.whatsapp-link');
 let whatsappLinkText;
 
 //hide sections before load
-startSection.classList.add('hidden');
-// beynishStartSection.classList.add('hidden');
+// startSection.classList.add('hidden');
+beynishStartSection.classList.add('hidden');
 conceptsSection.classList.add('hidden');
 resultSection.classList.add('hidden');
 // showLoader();
