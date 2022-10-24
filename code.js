@@ -26,6 +26,9 @@ resultSection.classList.add('hidden');
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.7/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.6.7/firebase-analytics.js";
+// import { 
+//   initializeAppCheck, ReCaptchaV3Provider 
+// } from "https://www.gstatic.com/firebasejs/9.6.7/firebase-app-check.js";
 import {
   getDatabase,
   ref,
@@ -47,6 +50,10 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 getAnalytics(app);
+
+// initializeAppCheck(app, {
+//   provider: new ReCaptchaV3Provider('6Lfc2KkiAAAAAKgUwboNznYbihLkrz8lzaaL0H2Z'),
+// });
 
 
 //functions
@@ -129,6 +136,19 @@ function get_tmp_grade(term, big_count, small_count, big_know, small_know, is_bi
   }
 }
 
+function get_sorted(grades)
+{
+  let sortable = [];
+  for (var grade in grades) {
+      sortable.push([grade, grades[grade]]);
+  }
+
+  sortable.sort(function(a, b) {
+      return b[1] - a[1];
+  });
+  return sortable;
+}
+
 // All the DB things are here
 window.submitConcepts = async () => {
   conceptsSection.classList.add('hidden');
@@ -170,12 +190,13 @@ window.submitConcepts = async () => {
 
   if (shioor.value != "" && !window.localStorage.getItem('done')) // change DB.
   {
+    console.log('changing DB...');
     window.localStorage.setItem('done', 1);
 
     // 1 if "1", MAX_RESPONSES if "0" (I guess there will be more ktanim than gdolim)
     var duplicate = (shioor.value == "0") * (MAX_REPONSES - 1) + 1;
     var res;
-    if (yeshiva.value in val)
+    if (val !== null && yeshiva.value in val)
     {
       res = val[yeshiva.value];
       res[0] += duplicate;
@@ -194,17 +215,13 @@ window.submitConcepts = async () => {
     set(qRef, res);
   }
 
-  let sortable = [];
-  for (var grade in grades) {
-      sortable.push([grade, grades[grade]]);
-  }
-
-  sortable.sort(function(a, b) {
-      return b[1] - a[1];
-  });
+  const sortable = get_sorted(grades);
   
   for (var i = 0; i < 3; i++)
   {
+    // TODO: delete this after we have DB
+    if (sortable[i] === undefined)
+      break;
     document.getElementById('res' + (i+1)).innerHTML = `#${i+1} - ${sortable[i][0]} (${sortable[i][1]}% התאמה)`
   }
   
