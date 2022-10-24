@@ -262,7 +262,7 @@ function autocomplete(inp, arr) {
       /*close any already open lists of autocompleted values*/
       closeAllLists();
       if (!val) { return false;}
-      currentFocus = -1;
+      currentFocus = 0;
       /*create a DIV element that will contain the items (values):*/
       a = document.createElement("DIV");
       a.setAttribute("id", this.id + "autocomplete-list");
@@ -315,9 +315,9 @@ function autocomplete(inp, arr) {
       } else if (e.keyCode == 13) {
         /*If the ENTER key is pressed, prevent the form from being submitted,*/
         e.preventDefault();
-        if (currentFocus > -1) {
+        if (currentFocus > 0) {
           /*and simulate a click on the "active" item:*/
-          if (x) x[currentFocus].click();
+          if (x) x[currentFocus-1].click();
         }
       }
   });
@@ -326,11 +326,11 @@ function autocomplete(inp, arr) {
     if (!x) return false;
     /*start by removing the "active" class on all items:*/
     removeActive(x);
-    if (currentFocus >= x.length) currentFocus = 0;
-    if (currentFocus < 0) currentFocus = (x.length - 1);
+    if (currentFocus - 1 >= x.length) currentFocus = 1;
+    if (currentFocus < 1) currentFocus = (x.length -1);
     /*add class "autocomplete-active":*/
-    x[currentFocus].classList.add("autocomplete-active");
-    inp.value = x[currentFocus].innerText;
+    x[currentFocus-1].classList.add("autocomplete-active");
+    inp.value = x[currentFocus-1].innerText;
   }
   function removeActive(x) {
     /*a function to remove the "active" class from all autocomplete items:*/
