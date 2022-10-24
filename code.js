@@ -26,9 +26,7 @@ resultSection.classList.add('hidden');
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.7/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.6.7/firebase-analytics.js";
-// import { 
-//   initializeAppCheck, ReCaptchaV3Provider 
-// } from "https://www.gstatic.com/firebasejs/9.6.7/firebase-app-check.js";
+
 import {
   getDatabase,
   ref,
@@ -51,12 +49,9 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 getAnalytics(app);
 
-// initializeAppCheck(app, {
-//   provider: new ReCaptchaV3Provider('6Lfc2KkiAAAAAKgUwboNznYbihLkrz8lzaaL0H2Z'),
-// });
 
 
-//functions
+// Functions
 
 window.openStartSection = () => {
   beynishStartSection.classList.add('hidden');
