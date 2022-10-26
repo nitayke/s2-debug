@@ -190,7 +190,7 @@ window.submitConcepts = async () => {
     if (terms_sum === terms.length)
       document.getElementById('smartass').innerHTML = 'שמע, אתה יודע הכל. אין לך מה לחפש פה. אולי כדאי לך ללכת לשעשועון "מי רוצה להיות מיליונר", אלא אם אתה לא רוצה להיות מיליונר ואז אולי לא כדאי לך ללכת לשם. אוהבים, החבר\'ה';
     else
-      document.getElementById('smartass').innerHTML = 'שמע, אין לך מה לחפש פה. כדאי לך לנסות לפתוח מידי פעם ויקיפדיה. אתה יודע מה זה ויקיפדיה, נכון? הינה, שמנו לך לינק פה: <a href="https://www.wikipedia.org.il">הינה</a>';
+      document.getElementById('smartass').innerHTML = 'שמע, אין לך מה לחפש פה. כדאי לך לנסות לפתוח מידי פעם ויקיפדיה. אתה יודע מה זה ויקיפדיה, נכון? הינה, שמנו לך לינק (קישור) פה: <a href="https://www.wikipedia.org.il">הינה</a>';
   }
 
   var grades = {};
