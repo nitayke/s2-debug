@@ -221,6 +221,7 @@ img{
 }
 
 .links-box{
+  width: 100%;
   margin-top: 1rem;
   display: flex;
   gap: 1rem;
