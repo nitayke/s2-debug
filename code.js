@@ -228,22 +228,26 @@ window.submitConcepts = async () => {
     percentage.innerHTML += grades[shioor.value] + '%';
   }
 
+  hideLoader();
+  resultSection.classList.remove('hidden');
+}
+
+window.sendResultViaWhatsapp = () => {
   whatsappLinkText = 'https://wa.me?text='
-  whatsappLinkText += 'עשיתי את שאלון המושגים של שבושון 2 שאומר לי איזו ישיבה או מכינה מתאימה לי ואלה התוצאות שקיבלתי'
+  whatsappLinkText += 'עשיתי את שאלון המושגים של שבושון 2 שאומר לי איזו ישיבה או מכינה מתאימה לי ואלה התוצאות שקיבלתי:'
   whatsappLinkText += '%0a'
-  whatsappLinkText += document.getElementById('res1').innerText;
+  whatsappLinkText += document.getElementById('res1').innerText.replace('#', '');
   whatsappLinkText += '%0a'
-  whatsappLinkText += document.getElementById('res2').innerText;
+  whatsappLinkText += document.getElementById('res2').innerText.replace('#', '');
   whatsappLinkText += '%0a'
-  whatsappLinkText += document.getElementById('res3').innerText;
+  whatsappLinkText += document.getElementById('res3').innerText.replace('#', '');
+  whatsappLinkText += '%0a'
   whatsappLinkText += '%0a'
   whatsappLinkText += 'נסו גם אתם את השאלון בקישור:'
   whatsappLinkText += '%0a'
   whatsappLinkText += 'https://nitayke.github.io/shvushon2-debug/'
   whatsappLink.setAttribute('href', whatsappLinkText)
-
-  hideLoader();
-  resultSection.classList.remove('hidden');
+  console.log(whatsappLinkText)
 }
 
 //Yeshivot autocomplete
