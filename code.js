@@ -18,11 +18,8 @@ const whatsappLink = document.querySelector('.whatsapp-link');
 let whatsappLinkText;
 
 //hide sections before load
-// startSection.classList.add('hidden');
-beynishStartSection.classList.add('hidden');
 conceptsSection.classList.add('hidden');
 resultSection.classList.add('hidden');
-// showLoader();
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.7/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.6.7/firebase-analytics.js";
@@ -66,9 +63,26 @@ window.openBeynishStartSection = () => {
 window.openConceptsSection = () => {
   document.querySelectorAll('.concept').forEach(item => item.classList.remove('active'))
   startSection.classList.add('hidden');
-  beynishStartSection.classList.add('hidden');
   conceptsSection.classList.remove('hidden');
   resultSection.classList.add('hidden');
+}
+
+window.handleCb = () => {
+  if (document.getElementById('cb').checked)
+  {
+    var nodes = document.getElementById("beynish-form").getElementsByTagName('*');
+    for(var i = 0; i < nodes.length; i++) {
+        nodes[i].disabled = true;
+        nodes[i].value = "";
+    }
+  }
+  else
+  {
+    var nodes = document.getElementById("beynish-form").getElementsByTagName('*');
+    for(var i = 0; i < nodes.length; i++){
+        nodes[i].disabled = false;
+    }
+  }
 }
 
 function showLoader() {
@@ -105,14 +119,14 @@ const godel = {"אור וישועה": 60, "אור עציון": 160, "אור עק
   "הר שלום – חומש": 10, "חולון": 35, "טפחות": 110, "יפו – שירת משה": 140, "ירוחם": 250,
   "ישיבת הגולן – חיספין": 150, "ישיבת ההסדר דימונה": 70, "ישיבת ההסדר צפת": 135,
   "ישיבת הכותל": 350, "ישיבת המקדש": 13, "ישיבת חומש המתחדשת": 10, "ישיבת עלי – בני דוד": 270,
-  "ישיבת קשת": 10, "ישיבת רמות": 10, "כרם ביבנה": 350, "לב לדעת – שדרות": 100, "מחניים": 100,
+  "ישיבת קשת": 10, "ישיבת רמות": 10, "כרם ביבנה": 250, "לב לדעת – שדרות": 100, "מחניים": 100,
   "מכינת אבנר - עכו": 200, "מכינת אורות": 150, "מכינת איתן": 150, "מכינת אלישע": 300,
   "מכינת ארזי הלבנון": 100, "מכינת בית יתיר": 200, "מכינת בני דוד - עלי": 450,
   "מכינת חוסן": 40, "מכינת חמדת": 50, "מכינת ידידיה": 70, "מכינת לפידות - אמונה": 50,
   "מכינת מגן שאול": 100, "מכינת מעלה אפרים": 250, "מכינת מעוז": 30, "מכינת משכיות": 30,
   "מכינת עז שלמה": 30, "מכינת עטרת": 120, "מכינת עצם (עצמונה)": 450, "מכינת קשת יהודה": 400,
-  "מכינת רוח השדה": 200, "מכינת שובו אחים": 20, "מכינת תמיר": 50, "מעלה אליהו": 160,
-  "מעלה גלבוע": 120, "מעלות": 250, "מצפה יריחו": 200, "מצפה רמון": 300, "מרכז הרב": 550,
+  "מכינת רוח השדה": 170, "מכינת שובו אחים": 20, "מכינת תמיר": 50, "מעלה אליהו": 160,
+  "מעלה גלבוע": 100, "מעלות": 250, "מצפה יריחו": 160, "מצפה רמון": 300, "מרכז הרב": 600,
   "נהריה": 100, "נווה דקלים": 150, "נטע שורק": 30, "ניר – קרית ארבע": 100, "נצר מטעי – נצרים": 70,
   "נצרת עילית": 50, "נתיבות – אהבת ישראל": 50, "נתיבות דרור – תלם": 20, "נתיבות יוסף": 20,
   "נתיבות ישראל – בת ים": 50, "סוסיא": 17, "עוז ואמונה": 50, "עטרת ירושלים": 180, "עטרת מרדכי": 40,
@@ -132,7 +146,6 @@ function get_tmp_grade(term, big_count, small_count, big_know, small_know, is_bi
     else
       return 1 - small_know/small_count
   }
-  // איך אומרים, העדפתי שזה יהיה קריא מאשר שזה יהיה קצר
   else if (small_count === 0)
   {
     if (term)
@@ -140,6 +153,7 @@ function get_tmp_grade(term, big_count, small_count, big_know, small_know, is_bi
     else
       return 1 - big_know/big_count
   }
+  // איך אומרים, העדפתי שזה יהיה קריא מאשר שזה יהיה קצר
   else if (is_big)
   {
     if (term)
@@ -182,7 +196,7 @@ window.submitConcepts = async () => {
   })
 
   const terms_sum = terms.reduce((partialSum, a) => partialSum + a, 0);
-  if (terms_sum === terms.length || terms_sum === 0)
+  if (terms_sum === terms.length || terms_sum < 3)
   {
     hideLoader();
     resultSection.classList.remove('hidden');
@@ -205,7 +219,7 @@ window.submitConcepts = async () => {
     var musag = val[key][0];
     var big_count = musag % MAX_REPONSES;
     var small_count = Math.floor(musag / MAX_REPONSES);
-    if (small_count+big_count < 5)
+    if (small_count+big_count < 8)
       continue;
     const is_big = shioor.value === "1";
     var grade = 0;
@@ -213,16 +227,16 @@ window.submitConcepts = async () => {
 
     for (var i = 1; i < musagim_length + 1; i++) // musagim
     {
-      musag = val[key][i]
+      musag = val[key][i];
     
       grade += get_tmp_grade(terms[i-1], big_count, small_count, musag % MAX_REPONSES,
-        Math.floor(musag / MAX_REPONSES), is_big);      
+        Math.floor(musag / MAX_REPONSES), is_big);
     }
-    const updated_grade = grade * (100/(musagim_length));
-    const size = godel[key];
-    grades[key] = (updated_grade + ((100 - updated_grade) / ((1.428*size**(1/3) + 8))) * (size**(1/3))).toFixed(2);
-  }
+    const size = godel[key] ** (1/3);
+    grade = grade * (100/64);
 
+    grades[key] = grade + (100 - grade) / (1.428 * size + 8) * size;
+  }
 
   if (shioor.value != "" && !window.localStorage.getItem('done')) // change DB.
   {
@@ -252,21 +266,22 @@ window.submitConcepts = async () => {
   }
 
   const sortable = get_sorted(grades);
+  const top3 = [];
   
   for (var i = 0; i < 3; i++)
   {
-    // TODO: delete this after we have DB
-    if (sortable[i] === undefined)
-      break;
-    document.getElementById('res' + (i+1)).innerHTML = `#${i+1} - ${sortable[i][0]} (${sortable[i][1]}% התאמה)`
+    document.getElementById('res' + (i+1)).innerHTML =
+     `#${i+1} - ${sortable[i][0]} (${(sortable[i][1] + (2-i) * 4 + Math.random() * 4.5).toFixed(2)}% התאמה)`;
+    if (yeshiva.value === sortable[i][0])
+      document.getElementById('res' + (i+1)).innerHTML += ' (איזה צירוף מקרים, הא?)'
+    top3.push(sortable[i][0]);
   }
-  
   // show percentage for his yeshiva
-  if (shioor.value !== "")
+  if (shioor.value !== "" && yeshiva.value in grades && ! (top3.includes(yeshiva.value)))
   {
     const percentage = document.getElementById('percentage');
     percentage.hidden = false;
-    percentage.innerHTML += grades[shioor.value] + '%';
+    percentage.innerHTML += (grades[yeshiva.value]).toFixed(2) + '%';
   }
 
   hideLoader();
@@ -286,9 +301,8 @@ window.sendResultViaWhatsapp = () => {
   whatsappLinkText += '%0a'
   whatsappLinkText += 'נסו גם אתם את השאלון בקישור:'
   whatsappLinkText += '%0a'
-  whatsappLinkText += 'https://nitayke.github.io/shvushon2-debug/'
+  whatsappLinkText += 'https://shvushon.github.io/shvushon2/'
   whatsappLink.setAttribute('href', whatsappLinkText)
-  console.log(whatsappLinkText)
 }
 
 //Yeshivot autocomplete
@@ -421,15 +435,24 @@ let yeshivot = ["אור וישועה", "אור עציון", "אור עקיבא",
   "נטע שורק", "ניר – קרית ארבע", "נצר מטעי – נצרים", "נצרת עילית", "נתיבות – אהבת ישראל",
   "נתיבות דרור – תלם", "נתיבות יוסף", "נתיבות ישראל – בת ים", "סוסיא", "עוז ואמונה",
   "עטרת ירושלים", "עטרת מרדכי", "עטרת נחמיה", "עתניאל", "צרור המור – בית שאן", "קרית גת",
-  "קרית שמונה", "קרני שומרון", "ראשון לציון", "רוח השדה", "רמלה", "רמת גן", "רמת השרון",
+  "קרית שמונה", "קרני שומרון", "ראשון לציון", "רמלה", "רמת גן", "רמת השרון",
   "רעותא", "שבי חברון", "שדמות נריה", "שדרות", "שיח יצחק – אפרת", "שילה",
   "שעלבים", "תפוח – אבינעם", "תקוע"];
 autocomplete(document.getElementById("autocomplete-input"), yeshivot);
 
-//Beynish Form Validation
+// Beynish Form Validation
 
 window.validateForm = () => {
-  if(yeshivot.includes(yeshiva.value) && shioor.value != ""){
-    openConceptsSection();
+  if (document.getElementById('cb').checked)
+  {
+    var nodes = document.getElementById("beynish-form").getElementsByTagName('*');
+    for(var i = 0; i < nodes.length; i++) {
+        nodes[i].disabled = true;
+        nodes[i].value = "";
+    }
   }
+  if(yeshivot.includes(yeshiva.value) && shioor.value != "" ||
+   document.getElementById('cb').checked) {
+    openConceptsSection();
+  }  
 }

@@ -18,6 +18,7 @@
     <link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/shvushon/shvushon2/main/favicon.ico">
 </head>
 <body>
+<img src="https://counter4.stat.ovh/private/freecounterstat.php?c=c5m6qegbar8t8hxutngtn73an8rex642" hidden/>
 <div class="all-site">
 
 
@@ -31,64 +32,43 @@
                 <p><b>שמיניסט מבולבל, בייניש/מכיניסט סקרן או סתם איזו אחת שבאה לבדוק איפה כדאי לה לחפש שידוך</b></p>
                 <h2>ספרו לנו איזה מושגים אתם מכירים ונאמר לכם לאיזו ישיבה או מכינה אתם שייכים</h2>            
                 <p>במסך הבא נציג בפניכם רשימת דמויות ומושגים. בחרו את אלה שאתם מכירים ואנחנו נציג לכם אילו ישיבות או מכינות מתאימות לכם על סמך בחירותיכם.</p>
-                <h3>
-                    <span class="bigger-greener">שבוש יקר</span>,
-                    <br>
-                    רוצה לדעת באיזו ישיבה או מכינה כדאי לך לבדוק?
-                </h3>
-                <button class="link-styling" id="shvush" onclick="openConceptsSection()">
-                    לחץ כאן!
-                </button>
                 
-                <h3>
-                    <span class="bigger-greener">בייניש</span> או <span class="bigger-greener">מכיניסט</span>,
-                    <br>
-                    רוצה לדעת אם בחרת נכון (ולעזור לנו בשיפור המידע)?
-                </h3>
-                <button class="link-styling" id="student" onclick="openBeynishStartSection()">
-                    לחץ כאן!
-                </button>
-            </div>
-        </header>
-    </div>
+                <div class="line"></div>
 
-    <div class="beynish-start-section section">
+                <div class="beynish-form" id="beynish-form">    
+                    <label for="yeshiva">באיזה מוסד אתה לומד? <br>(אם אתה לא לומד עדיין, לחץ על הכפתור למטה)</label>
+                    <div class="autocomplete">
+                        <input id="autocomplete-input" 
+                        type="text" name="yeshiva" autocomplete="off" 
+                        placeholder="התחל לכתוב ובחר מוסד מהרשימה..."
+                        required>
+                    </div>
 
-        <header class="sub-header">
-            <h1>שבושון 2</h1>
-        </header>
+                    <label for="shioor">איזה שיעור אתה?</label>
+                    <select name="shioor" id="shioor" required>
+                        <option value="" disabled selected hidden>בחר מהרשימה</option>
+                        <option value="0">א'</option>
+                        <option value="1">ב'</option>
+                        <option value="1">ג'</option>
+                        <option value="1">ד'</option>
+                        <option value="1">ה'</option>
+                        <option value="1">ו' ומעלה (גם בוגרים)</option>
+                    </select>
+                </div>
 
-        <h3>בייניש/מכיניסט יקר, לפני שנתחיל בשאלון:</h3>
-
-        <div class="beynish-form">
-            <label for="yeshiva">באיזה מוסד אתה לומד?</label>
-            <div class="autocomplete">
-                <input id="autocomplete-input" 
-                type="text" name="yeshiva" autocomplete="off" 
-                placeholder="התחל לכתוב ובחר מוסד מהרשימה..."
-                required>
-            </div>
-
-            <label for="shioor">איזה שיעור אתה?</label>
-            <select name="shioor" id="shioor" required>
-                <option value="" disabled selected hidden>בחר מהרשימה</option>
-                <option value="0">א'</option>
-                <option value="1">ב'</option>
-                <option value="1">ג'</option>
-                <option value="1">ד'</option>
-                <option value="1">ה'</option>
-                <option value="1">ו' ומעלה (גם בוגרים)</option>
-            </select>
-
-            <div class="beynish-btns">
-                <button class="link-styling" onclick="openStartSection()">התבלבלתי אני בכלל לא <br> בייניש או מכיניסט בכלל</button>
-                <button onclick="validateForm()" 
+                <div class="tahat">
+                    <input type="checkbox" name="cb" id="cb" onchange="handleCb()"></input>
+                    <label for="cb">אני לא לומד בישיבה/מכינה</label>
+                </div>
+            
+                <button onclick="validateForm()"
                 class="button-styling beynish-start-btn">
                 התחל!
-            </button>
-        </div>
+                </button>
+            </div>
+        </header>
     </div>
-    </div>
+
 
     <!-- Concepts Section -->
     <main class="concepts-section section">
@@ -108,7 +88,7 @@
             <button class="concept">דיאלקטיקה</button>
             <button class="concept">דיוויד שווימר</button>
             <button class="concept">האדמו"ר הרש"ב</button>
-            <button class="concept">האנס זימר</button>
+            <button class="concept">הנס זימר</button>
             <button class="concept">הרב אילעאי עופרן</button>
             <button class="concept">הרב אליעזר איגרא</button>
             <button class="concept">הרב אמנון בזק</button>
@@ -123,13 +103,13 @@
             <button class="concept">יוני בלוך</button>
             <button class="concept">ישעיהו ליבוביץ</button>
             <button class="concept">כריסטופר נולאן</button>
-            <button class="concept">לודוויג וינגשטיין</button>
+            <button class="concept">לודוויג ויטגנשטיין</button>
             <button class="concept">לוט"ר</button>
             <button class="concept">ליהיא גרינר</button>
             <button class="concept">לינוס טורבאלדס</button>
             <button class="concept">ליקוטי אמרים</button>
             <button class="concept">מייק ווילר</button>
-            <button class="concept">מלכות וקסברג</button>
+            <button class="concept">מלכות וקסברגר</button>
             <button class="concept">מרטין לותר קינג</button>
             <button class="concept">ניהיליזם</button>
             <button class="concept">סאול ניגס</button>
@@ -158,7 +138,7 @@
             <button class="concept">רגרסיה</button>
             <button class="concept">רצוא ושוב</button>
             <button class="concept">תולדות אברהם יצחק</button>
-            <button class="concept">תום באום</button>
+            <button class="concept">טום באום</button>
             <button class="concept">תקבולת כיאסטית</button>
 
 
@@ -176,7 +156,7 @@
         </header>
         <h2 id="smartass"></h2>
         <div class="section-padding" id="result-section">
-            <h1 class="smallerH1">הישיבות המומלצות עבורך הן:</h1>
+            <h1 class="smallerH1">המוסדות המומלצים עבורך הם: </h1>
             <h2 id="res1"></h2>
             <h2 id="res2"></h2>
             <h2 id="res3"></h2>
@@ -197,16 +177,23 @@
                     <br>
                     נסה את שבושון 1
                 </a>
+                <a href="https://shvushon.github.io/shlichim" class="link-styling">
+                    <img width="36px" height="30.86px" src="https://shvushon.github.io/shlichim/favicon.jpg">
+                    <br>
+                    שליחון - שליחים לחוד"א
+                </a>
             </div>
             <p>
                 <b>יוצרים:</b>
                 <br>
-                נתאי קסנר
+                אייל הלמון
                 <br>
                 נדב אילני
                 <br>
-                אייל הלמון
+                נתאי קסנר
 
+                <br>
+                <b>מייל ליצירת קשר:</b> shvushon@gmail.com
             </p>
         </div>
     </div>
@@ -221,6 +208,6 @@
     <div class="loader-text" hidden>מערכת שבושון מתאימה לך ישיבה או מכינה, אנא המתן...</div>
   </div>
   <div class="dark-screen" hidden></div>
-    <script type="module" src="code.js"></script>
+    <script type="module" src="ugly-code.js"></script>
 </body>
 </html>
