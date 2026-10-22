@@ -356,3 +356,38 @@ img{
   background: #000000af;
   transition: 500ms ease-in-out;
 }
+
+.contact-wrapper {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+}
+
+.contact-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background-color: #005e19;
+  color: #fff;
+  padding: 0.6rem 1.4rem;
+  border-radius: 0.5rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 180ms ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.contact-btn:hover {
+  background-color: #06b936;
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
+}
+
+.contact-btn:active {
+  transform: scale(0.95);
+}
+

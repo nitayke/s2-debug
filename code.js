@@ -1,41 +1,20 @@
-const MAX_REPONSES = 300
-
-// Varibles
-const startSection = document.querySelector('.start-section');
-const beynishStartSection = document.querySelector('.beynish-start-section');
-const conceptsSection = document.querySelector('.concepts-section');
-const resultSection = document.querySelector('.result-section');
-const yeshiva = document.getElementById('autocomplete-input')
-const shioor = document.getElementById('shioor')
-
-const loaderCircle = document.querySelector(".loader-circle");
-const loaderLine = document.querySelector(".loader-line");
-const loaderClock = document.querySelector(".loader-clock");
-const loaderText = document.querySelector(".loader-text");
-const darkScreen = document.querySelector(".dark-screen");
-
-const whatsappLink = document.querySelector('.whatsapp-link');
-let whatsappLinkText;
-
-//hide sections before load
-conceptsSection.classList.add('hidden');
-resultSection.classList.add('hidden');
+// Shvushon 2 - Debug (Refactored for Cloud Firestore)
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.7/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.6.7/firebase-analytics.js";
-
 import {
-  getDatabase,
-  ref,
-  set,
-  get,
-} from "https://www.gstatic.com/firebasejs/9.6.7/firebase-database.js";
+  getFirestore,
+  collection,
+  doc,
+  getDocs,
+  setDoc,
+  increment
+} from "https://www.gstatic.com/firebasejs/9.6.7/firebase-firestore.js";
 
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+// Firebase Config
 const firebaseConfig = {
   apiKey: "AIzaSyAm7hTWEmt1JRX3JXpq_dDNQWo0KKKC008",
   authDomain: "shvushon2.firebaseapp.com",
-  databaseURL: "https://shvushon2-default-rtdb.europe-west1.firebasedatabase.app",
   projectId: "shvushon2",
   storageBucket: "shvushon2.appspot.com",
   messagingSenderId: "833572668563",
@@ -45,72 +24,31 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 getAnalytics(app);
+const db = getFirestore(app);
 
+// DOM Elements
+const startSection = document.querySelector('.start-section');
+const beynishStartSection = document.querySelector('.beynish-start-section');
+const conceptsSection = document.querySelector('.concepts-section');
+const resultSection = document.querySelector('.result-section');
+const yeshivaInput = document.getElementById('autocomplete-input');
+const shioorSelect = document.getElementById('shioor');
+const cbInput = document.getElementById('cb');
 
+const loaderCircle = document.querySelector(".loader-circle");
+const loaderLine = document.querySelector(".loader-line");
+const loaderClock = document.querySelector(".loader-clock");
+const loaderText = document.querySelector(".loader-text");
+const darkScreen = document.querySelector(".dark-screen");
+const whatsappLink = document.querySelector('.whatsapp-link');
 
-// Functions
+// Hide inactive sections on boot
+if (conceptsSection) conceptsSection.classList.add('hidden');
+if (resultSection) resultSection.classList.add('hidden');
 
-window.openStartSection = () => {
-  beynishStartSection.classList.add('hidden');
-  startSection.classList.remove('hidden');
-}
-
-window.openBeynishStartSection = () => {
-  startSection.classList.add('hidden');
-  beynishStartSection.classList.remove('hidden');
-}
-
-window.openConceptsSection = () => {
-  document.querySelectorAll('.concept').forEach(item => item.classList.remove('active'))
-  startSection.classList.add('hidden');
-  conceptsSection.classList.remove('hidden');
-  resultSection.classList.add('hidden');
-}
-
-window.handleCb = () => {
-  if (document.getElementById('cb').checked)
-  {
-    var nodes = document.getElementById("beynish-form").getElementsByTagName('*');
-    for(var i = 0; i < nodes.length; i++) {
-        nodes[i].disabled = true;
-        nodes[i].value = "";
-    }
-  }
-  else
-  {
-    var nodes = document.getElementById("beynish-form").getElementsByTagName('*');
-    for(var i = 0; i < nodes.length; i++){
-        nodes[i].disabled = false;
-    }
-  }
-}
-
-function showLoader() {
-  loaderCircle.hidden = false;
-  loaderLine.hidden = false;
-  loaderClock.hidden = false;
-  loaderText.hidden = false;
-  darkScreen.hidden = false;
-}
-
-function hideLoader() {
-  loaderCircle.hidden = true;
-  loaderLine.hidden = true;
-  loaderClock.hidden = true;
-  loaderText.hidden = true;
-  darkScreen.hidden = true;
-}
-
-
-//choose concepts on click
-document.querySelectorAll('.concept').forEach(item => {
-    item.addEventListener('click', event => {
-      item.classList.toggle('active')
-    })
-  })
-  
-
-const godel = {"אור וישועה": 60, "אור עציון": 160, "אור עקיבא": 20, "אורות אשקלון": 20,
+// Institutional sizes for Bayesian/normalizing calculation
+const godel = {
+  "אור וישועה": 60, "אור עציון": 160, "אור עקיבא": 20, "אורות אשקלון": 20,
   "אורות כרמיאל": 30, "אורות נתניה": 50, "אורות שאול": 160, "איילת השחר – אילת": 120,
   "איתמר": 150, "אפיקי דעת – שדרות": 500, "ארץ הצבי – פדואל": 20, "אש התורה": 20, "באר התחיה": 10,
   "בית אל": 300, "בית המדרש ראש פינה": 10, "ברוכין": 160, "ברכת יוסף – אלון מורה": 130,
@@ -133,292 +71,11 @@ const godel = {"אור וישועה": 60, "אור עציון": 160, "אור עק
   "עטרת נחמיה": 47, "עכו": 170, "עתניאל": 300, "צרור המור – בית שאן": 70, "קרית גת": 30,
   "קרית שמונה": 250, "קרני שומרון": 300, "ראשון לציון": 100, "רמלה": 40, "רמת גן": 300,
   "רמת השרון": 60, "רעותא": 20, "שבי חברון": 400, "שדמות נריה": 40, "שיח יצחק – אפרת": 50,
-  "שילה": 90, "שעלבים": 100, "תפוח – אבינעם": 140, "תקוע": 35}
+  "שילה": 90, "שעלבים": 100, "תפוח – אבינעם": 140, "תקוע": 35
+};
 
-function get_tmp_grade(term, big_count, small_count, big_know, small_know, is_big)
-{
-  // if there are only small responses, we use only them,
-  // it doesn't matter if he's big or small
-  if (big_count === 0)
-  {
-    if (term)
-      return small_know/small_count
-    else
-      return 1 - small_know/small_count
-  }
-  else if (small_count === 0)
-  {
-    if (term)
-      return big_know/big_count
-    else
-      return 1 - big_know/big_count
-  }
-  // איך אומרים, העדפתי שזה יהיה קריא מאשר שזה יהיה קצר
-  else if (is_big)
-  {
-    if (term)
-      return ((big_know/big_count) * 2 + (small_know/small_count)) / 3;
-    else
-      return ((1 - big_know/big_count) * 2 + (1 - small_know/small_count)) / 3;
-  }
-  else
-  {
-    if (term)
-      return ((big_know/big_count) + (small_know/small_count) * 2) / 3;
-    else
-      return ((1 - big_know/big_count) + (1 - small_know/small_count) * 2) / 3;
-  }
-}
-
-function get_sorted(grades)
-{
-  let sortable = [];
-  for (var grade in grades) {
-      sortable.push([grade, grades[grade]]);
-  }
-
-  sortable.sort(function(a, b) {
-      return b[1] - a[1];
-  });
-  return sortable;
-}
-
-// All the DB things are here
-window.submitConcepts = async () => {
-  conceptsSection.classList.add('hidden');
-
-  showLoader();
-
-  var terms = [];
-  
-  document.querySelectorAll('.concept').forEach(item => {
-    terms.push(item.classList.contains('active'));
-  })
-
-  const terms_sum = terms.reduce((partialSum, a) => partialSum + a, 0);
-  if (terms_sum === terms.length || terms_sum < 3)
-  {
-    hideLoader();
-    resultSection.classList.remove('hidden');
-    document.getElementById('result-section').hidden = true;
-    if (terms_sum === terms.length)
-      document.getElementById('smartass').innerHTML = 'שמע, אתה יודע הכל. אין לך מה לחפש פה. אולי כדאי לך ללכת לשעשועון "מי רוצה להיות מיליונר", אלא אם אתה לא רוצה להיות מיליונר ואז אולי לא כדאי לך ללכת לשם. אוהבים, החבר\'ה';
-    else
-      document.getElementById('smartass').innerHTML = 'שמע, אין לך מה לחפש פה. כדאי לך לנסות לפתוח מידי פעם ויקיפדיה. אתה יודע מה זה ויקיפדיה, נכון? הינה, שמנו לך לינק (קישור) פה: <a href="https://www.wikipedia.org.il">הינה</a>';
-  }
-
-  var grades = {};
-
-  var qRef = ref(getDatabase());
-  var snapshot = await get(qRef);
-  var val = snapshot.val();
-  var musagim_length;
-
-  for (var key in val) // in yeshivot
-  {
-    var musag = val[key][0];
-    var big_count = musag % MAX_REPONSES;
-    var small_count = Math.floor(musag / MAX_REPONSES);
-    if (small_count+big_count < 8)
-      continue;
-    const is_big = shioor.value === "1";
-    var grade = 0;
-    musagim_length = val[key].length - 1;
-
-    for (var i = 1; i < musagim_length + 1; i++) // musagim
-    {
-      musag = val[key][i];
-    
-      grade += get_tmp_grade(terms[i-1], big_count, small_count, musag % MAX_REPONSES,
-        Math.floor(musag / MAX_REPONSES), is_big);
-    }
-    const size = godel[key] ** (1/3);
-    grade = grade * (100/64);
-
-    grades[key] = grade + (100 - grade) / (1.428 * size + 8) * size;
-  }
-
-  if (shioor.value != "" && !window.localStorage.getItem('done')) // change DB.
-  {
-    console.log('changing DB...');
-    window.localStorage.setItem('done', 1);
-
-    // 1 if "1", MAX_RESPONSES if "0" (I guess there will be more ktanim than gdolim)
-    var duplicate = (shioor.value == "0") * (MAX_REPONSES - 1) + 1;
-    var res;
-    if (val !== null && yeshiva.value in val)
-    {
-      res = val[yeshiva.value];
-      res[0] += duplicate;
-      for (var i = 1; i < res.length; i++)
-      {
-        res[i] += (terms[i - 1] * duplicate);
-      }
-    }
-    else
-    {
-      // first element is count of answers
-      res = [duplicate].concat(terms.map(x => x * duplicate));
-    }
-
-    qRef = ref(getDatabase(), yeshiva.value);
-    set(qRef, res);
-  }
-
-  const sortable = get_sorted(grades);
-  const top3 = [];
-  
-  for (var i = 0; i < 3; i++)
-  {
-    document.getElementById('res' + (i+1)).innerHTML =
-     `#${i+1} - ${sortable[i][0]} (${(sortable[i][1] + (2-i) * 4 + Math.random() * 4.5).toFixed(2)}% התאמה)`;
-    if (yeshiva.value === sortable[i][0])
-      document.getElementById('res' + (i+1)).innerHTML += ' (איזה צירוף מקרים, הא?)'
-    top3.push(sortable[i][0]);
-  }
-  // show percentage for his yeshiva
-  if (shioor.value !== "" && yeshiva.value in grades && ! (top3.includes(yeshiva.value)))
-  {
-    const percentage = document.getElementById('percentage');
-    percentage.hidden = false;
-    percentage.innerHTML += (grades[yeshiva.value]).toFixed(2) + '%';
-  }
-
-  hideLoader();
-  resultSection.classList.remove('hidden');
-}
-
-window.sendResultViaWhatsapp = () => {
-  whatsappLinkText = 'https://wa.me?text='
-  whatsappLinkText += 'עשיתי את שאלון המושגים של שבושון 2 שאומר לי איזו ישיבה או מכינה מתאימה לי ואלה התוצאות שקיבלתי:'
-  whatsappLinkText += '%0a'
-  whatsappLinkText += document.getElementById('res1').innerText.replace('#', '');
-  whatsappLinkText += '%0a'
-  whatsappLinkText += document.getElementById('res2').innerText.replace('#', '');
-  whatsappLinkText += '%0a'
-  whatsappLinkText += document.getElementById('res3').innerText.replace('#', '');
-  whatsappLinkText += '%0a'
-  whatsappLinkText += '%0a'
-  whatsappLinkText += 'נסו גם אתם את השאלון בקישור:'
-  whatsappLinkText += '%0a'
-  whatsappLinkText += 'https://shvushon.github.io/shvushon2/'
-  whatsappLink.setAttribute('href', whatsappLinkText)
-}
-
-//Yeshivot autocomplete
-function autocomplete(inp, arr) {
-  /*the autocomplete function takes two arguments,
-  the text field element and an array of possible autocompleted values:*/
-  var currentFocus;
-  /*execute a function when someone writes in the text field:*/
-  inp.addEventListener("input", function(e) {
-      var a, b, i, bold, val = this.value;
-      /*close any already open lists of autocompleted values*/
-      closeAllLists();
-      if (!val) { return false;}
-      currentFocus = 0;
-      /*create a DIV element that will contain the items (values):*/
-      a = document.createElement("DIV");
-      a.setAttribute("id", this.id + "autocomplete-list");
-      a.setAttribute("class", "autocomplete-items");
-      /*append the DIV element as a child of the autocomplete container:*/
-      this.parentNode.appendChild(a);
-      /*for each item in the array...*/
-      for (i = 0; i < arr.length; i++) {
-        /*check if the item starts with the same letters as the text field value:*/
-        if (arr[i].toUpperCase().includes(val.toUpperCase())) {
-          bold = getIncludeLetters(arr[i].toUpperCase(), val.toUpperCase());
-          /*create a DIV element for each matching element:*/
-          b = document.createElement("DIV");
-          /*make the matching letters bold:*/
-          b.innerHTML = arr[i].substr(0, bold)
-          b.innerHTML += "<strong>" + arr[i].substr(bold, val.length) + "</strong>";
-          b.innerHTML += arr[i].substr(parseInt(bold) + parseInt(val.length));
-          /*insert a input field that will hold the current array item's value:*/
-          b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
-          /*execute a function when someone clicks on the item value (DIV element):*/
-            b.addEventListener("click", function(e) {
-            /*insert the value for the autocomplete text field:*/
-            inp.value = this.getElementsByTagName("input")[0].value;
-            /*close the list of autocompleted values,
-            (or any other open lists of autocompleted values:*/
-            closeAllLists();
-          });
-          a.appendChild(b);
-        }
-      }
-  });
-  /*execute a function presses a key on the keyboard:*/
-  inp.addEventListener("keydown", function(e) {
-      var x = document.getElementById(this.id + "autocomplete-list");
-      if (x) x = x.getElementsByTagName("div");
-      if (e.keyCode == 40) {
-        /*If the arrow DOWN key is pressed,
-        increase the currentFocus variable:*/
-        e.preventDefault();
-        currentFocus++;
-        /*and and make the current item more visible:*/
-        addActive(x);
-      } else if (e.keyCode == 38) { //up
-        /*If the arrow UP key is pressed,
-        decrease the currentFocus variable:*/
-        e.preventDefault();
-        currentFocus--;
-        /*and and make the current item more visible:*/
-        addActive(x);
-      } else if (e.keyCode == 13) {
-        /*If the ENTER key is pressed, prevent the form from being submitted,*/
-        e.preventDefault();
-        if (currentFocus > 0) {
- /*and simulate a click on the "active" item:*/
- if (x) x[currentFocus-1].click();
-        }
-      }
-  });
-  function addActive(x) {
-    /*a function to classify an item as "active":*/
-    if (!x) return false;
-    /*start by removing the "active" class on all items:*/
-    removeActive(x);
-    if (currentFocus - 1 >= x.length) currentFocus = 1;
-    if (currentFocus < 1) currentFocus = (x.length -1);
-    /*add class "autocomplete-active":*/
-    x[currentFocus-1].classList.add("autocomplete-active");
-    inp.value = x[currentFocus-1].innerText;
-  }
-  function removeActive(x) {
-    /*a function to remove the "active" class from all autocomplete items:*/
-    for (var i = 0; i < x.length; i++) {
-      x[i].classList.remove("autocomplete-active");
-    }
-  }
-  function closeAllLists(elmnt) {
-    /*close all autocomplete lists in the document,
-    except the one passed as an argument:*/
-    var x = document.getElementsByClassName("autocomplete-items");
-    for (var i = 0; i < x.length; i++) {
-      if (elmnt != x[i] && elmnt != inp) {
-      x[i].parentNode.removeChild(x[i]);
-    }
-  }
-}
-/*execute a function when someone clicks in the document:*/
-document.addEventListener("click", function (e) {
-    closeAllLists(e.target);
-});
-}
-
-function getIncludeLetters(str, s) {
-  for (var i = 0; i < str.length - s.length + 1; i++) {
-    if (str.substring(i, s.length + i) == s) {
-      return i + " ";
-    }
-  }
-
-  return 0;
-}
-
-let yeshivot = ["אור וישועה", "אור עציון", "אור עקיבא", "אורות אשקלון", "אורות כרמיאל",
+const yeshivotList = [
+  "אור וישועה", "אור עציון", "אור עקיבא", "אורות אשקלון", "אורות כרמיאל",
   "אורות נתניה", "אורות שאול", "איילת השחר – אילת", "איתמר", "אפיקי דעת – שדרות",
   "ארץ הצבי – פדואל", "אש התורה", "באר התחיה", "בית אל", "בית המדרש ראש פינה",
   "ברוכין", "ברכת יוסף – אלון מורה", "ברכת משה – מעלה אדומים", "גבעת אולגה",
@@ -437,22 +94,349 @@ let yeshivot = ["אור וישועה", "אור עציון", "אור עקיבא",
   "עטרת ירושלים", "עטרת מרדכי", "עטרת נחמיה", "עתניאל", "צרור המור – בית שאן", "קרית גת",
   "קרית שמונה", "קרני שומרון", "ראשון לציון", "רמלה", "רמת גן", "רמת השרון",
   "רעותא", "שבי חברון", "שדמות נריה", "שדרות", "שיח יצחק – אפרת", "שילה",
-  "שעלבים", "תפוח – אבינעם", "תקוע"];
-autocomplete(document.getElementById("autocomplete-input"), yeshivot);
+  "שעלבים", "תפוח – אבינעם", "תקוע"
+];
 
-// Beynish Form Validation
+// UI Navigation
+window.openStartSection = () => {
+  if (beynishStartSection) beynishStartSection.classList.add('hidden');
+  if (startSection) startSection.classList.remove('hidden');
+};
 
-window.validateForm = () => {
-  if (document.getElementById('cb').checked)
-  {
-    var nodes = document.getElementById("beynish-form").getElementsByTagName('*');
-    for(var i = 0; i < nodes.length; i++) {
-        nodes[i].disabled = true;
-        nodes[i].value = "";
+window.openBeynishStartSection = () => {
+  if (startSection) startSection.classList.add('hidden');
+  if (beynishStartSection) beynishStartSection.classList.remove('hidden');
+};
+
+window.openConceptsSection = () => {
+  document.querySelectorAll('.concept').forEach(item => item.classList.remove('active'));
+  if (startSection) startSection.classList.add('hidden');
+  if (conceptsSection) conceptsSection.classList.remove('hidden');
+  if (resultSection) resultSection.classList.add('hidden');
+};
+
+window.handleCb = () => {
+  const form = document.getElementById("beynish-form");
+  if (!form) return;
+  const nodes = form.querySelectorAll('input, select');
+  const isChecked = cbInput && cbInput.checked;
+  nodes.forEach(node => {
+    node.disabled = isChecked;
+    if (isChecked) node.value = "";
+  });
+};
+
+function showLoader() {
+  if (loaderCircle) loaderCircle.hidden = false;
+  if (loaderLine) loaderLine.hidden = false;
+  if (loaderClock) loaderClock.hidden = false;
+  if (loaderText) loaderText.hidden = false;
+  if (darkScreen) darkScreen.hidden = false;
+}
+
+function hideLoader() {
+  if (loaderCircle) loaderCircle.hidden = true;
+  if (loaderLine) loaderLine.hidden = true;
+  if (loaderClock) loaderClock.hidden = true;
+  if (loaderText) loaderText.hidden = true;
+  if (darkScreen) darkScreen.hidden = true;
+}
+
+// Concept selection toggle
+document.querySelectorAll('.concept').forEach(item => {
+  item.addEventListener('click', () => {
+    item.classList.toggle('active');
+  });
+});
+
+// Scoring logic
+function getConceptScore(userKnows, bigCount, smallCount, bigKnow, smallKnow, isBig) {
+  let ratio = 0;
+  if (bigCount === 0 && smallCount === 0) {
+    return 0.5;
+  }
+  if (bigCount === 0) {
+    ratio = smallKnow / smallCount;
+  } else if (smallCount === 0) {
+    ratio = bigKnow / bigCount;
+  } else {
+    const ratioBig = bigKnow / bigCount;
+    const ratioSmall = smallKnow / smallCount;
+    ratio = isBig ? (ratioBig * 2 + ratioSmall) / 3 : (ratioBig + ratioSmall * 2) / 3;
+  }
+  return userKnows ? ratio : (1 - ratio);
+}
+
+function getSortedGrades(grades) {
+  const sortable = [];
+  for (const [institution, grade] of Object.entries(grades)) {
+    sortable.push([institution, grade]);
+  }
+  sortable.sort((a, b) => b[1] - a[1]);
+  return sortable;
+}
+
+// Fetch all yeshivot documents from Firestore
+async function fetchAllYeshivotFromFirestore() {
+  try {
+    const snapshot = await getDocs(collection(db, "yeshivot"));
+    const data = {};
+    snapshot.forEach(docSnap => {
+      data[docSnap.id] = docSnap.data();
+    });
+    return data;
+  } catch (err) {
+    console.error("Error fetching yeshivot from Firestore:", err);
+    return {};
+  }
+}
+
+// Save response to Firestore atomically
+async function saveResponseToFirestore(yeshivaName, isBig, activeConceptsMap) {
+  if (!yeshivaName || window.localStorage.getItem('shvushon_done')) return;
+  window.localStorage.setItem('shvushon_done', '1');
+
+  const field = isBig ? 'gdolim' : 'ktanim';
+  const yeshivaRef = doc(db, "yeshivot", yeshivaName);
+
+  const updates = {
+    name: yeshivaName,
+    [`respondents.${field}`]: increment(1),
+    [`respondents.total`]: increment(1)
+  };
+
+  for (const [conceptName, knows] of Object.entries(activeConceptsMap)) {
+    if (knows) {
+      updates[`concepts.${conceptName}.${field}`] = increment(1);
+      updates[`concepts.${conceptName}.total`] = increment(1);
     }
   }
-  if(yeshivot.includes(yeshiva.value) && shioor.value != "" ||
-   document.getElementById('cb').checked) {
-    openConceptsSection();
-  }  
+
+  try {
+    await setDoc(yeshivaRef, updates, { merge: true });
+    console.log("Successfully recorded response to Firestore!");
+  } catch (err) {
+    console.error("Failed to save response to Firestore:", err);
+  }
 }
+
+// Main submission handler
+window.submitConcepts = async () => {
+  if (conceptsSection) conceptsSection.classList.add('hidden');
+  showLoader();
+
+  const conceptElements = Array.from(document.querySelectorAll('.concept'));
+  const activeConceptsMap = {};
+  const terms = [];
+
+  conceptElements.forEach(el => {
+    const text = el.innerText.trim();
+    const isActive = el.classList.contains('active');
+    activeConceptsMap[text] = isActive;
+    terms.push(isActive);
+  });
+
+  const termsSum = terms.reduce((acc, val) => acc + (val ? 1 : 0), 0);
+
+  // Easter egg / funny messages for all or <3 concepts
+  if (termsSum === terms.length || termsSum < 3) {
+    hideLoader();
+    if (resultSection) resultSection.classList.remove('hidden');
+    const resultBox = document.getElementById('result-section');
+    if (resultBox) resultBox.hidden = true;
+
+    const smartass = document.getElementById('smartass');
+    if (smartass) {
+      if (termsSum === terms.length) {
+        smartass.innerHTML = 'שמע, אתה יודע הכל. אין לך מה לחפש פה. אולי כדאי לך ללכת לשעשועון "מי רוצה להיות מיליונר", אלא אם אתה לא רוצה להיות מיליונר ואז אולי לא כדאי לך ללכת לשם. אוהבים, החבר\'ה';
+      } else {
+        smartass.innerHTML = 'שמע, אין לך מה לחפש פה. כדאי לך לנסות לפתוח מידי פעם ויקיפדיה. אתה יודע מה זה ויקיפדיה, נכון? הינה, שמנו לך לינק (קישור) פה: <a href="https://www.wikipedia.org.il">הינה</a>';
+      }
+    }
+    return;
+  }
+
+  const allYeshivot = await fetchAllYeshivotFromFirestore();
+  const isBig = shioorSelect && shioorSelect.value === "1";
+  const grades = {};
+  const totalConceptsCount = conceptElements.length || 61;
+
+  for (const [key, instData] of Object.entries(allYeshivot)) {
+    const respondents = instData.respondents || {};
+    const bigCount = respondents.gdolim || 0;
+    const smallCount = respondents.ktanim || 0;
+
+    if (bigCount + smallCount < 8) continue;
+
+    let grade = 0;
+    const instConcepts = instData.concepts || {};
+
+    conceptElements.forEach(el => {
+      const cName = el.innerText.trim();
+      const userKnows = !!activeConceptsMap[cName];
+      const conceptStats = instConcepts[cName] || {};
+      const cGdolim = conceptStats.gdolim || 0;
+      const cKtanim = conceptStats.ktanim || 0;
+
+      grade += getConceptScore(userKnows, bigCount, smallCount, cGdolim, cKtanim, isBig);
+    });
+
+    // Dynamic normalization based on actual concept count
+    grade = grade * (100 / totalConceptsCount);
+
+    const instSize = ((godel[key] || 50) ** (1 / 3));
+    grades[key] = grade + (100 - grade) / (1.428 * instSize + 8) * instSize;
+  }
+
+  // Save submission to Firestore if from a yeshiva student
+  const studentYeshiva = yeshivaInput ? yeshivaInput.value.trim() : "";
+  if (shioorSelect && shioorSelect.value !== "" && studentYeshiva) {
+    await saveResponseToFirestore(studentYeshiva, isBig, activeConceptsMap);
+  }
+
+  // Rank and display results
+  const sorted = getSortedGrades(grades);
+  const top3 = [];
+
+  const topCount = Math.min(3, sorted.length);
+  for (let i = 0; i < topCount; i++) {
+    const item = sorted[i];
+    const resEl = document.getElementById('res' + (i + 1));
+    if (resEl) {
+      const matchPercent = (item[1] + (2 - i) * 4 + Math.random() * 4.5).toFixed(2);
+      let text = `#${i + 1} - ${item[0]} (${matchPercent}% התאמה)`;
+      if (studentYeshiva === item[0]) {
+        text += ' (איזה צירוף מקרים, הא?)';
+      }
+      resEl.innerHTML = text;
+    }
+    top3.push(item[0]);
+  }
+
+  // Show own yeshiva match if not in top 3
+  const percentageEl = document.getElementById('percentage');
+  if (percentageEl) {
+    if (shioorSelect && shioorSelect.value !== "" && studentYeshiva && (studentYeshiva in grades) && !top3.includes(studentYeshiva)) {
+      percentageEl.hidden = false;
+      percentageEl.innerHTML = 'אחוזי ההתאמה לישיבתך הקדושה הם: ' + (grades[studentYeshiva]).toFixed(2) + '%';
+    } else {
+      percentageEl.hidden = true;
+    }
+  }
+
+  hideLoader();
+  if (resultSection) {
+    resultSection.classList.remove('hidden');
+    const resultBox = document.getElementById('result-section');
+    if (resultBox) resultBox.hidden = false;
+  }
+};
+
+// WhatsApp Sharing
+window.sendResultViaWhatsapp = () => {
+  let text = 'https://wa.me?text=';
+  text += 'עשיתי את שאלון המושגים של שבושון 2 שאומר לי איזו ישיבה או מכינה מתאימה לי ואלה התוצאות שקיבלתי:%0a';
+  const r1 = document.getElementById('res1');
+  const r2 = document.getElementById('res2');
+  const r3 = document.getElementById('res3');
+  if (r1) text += r1.innerText.replace('#', '') + '%0a';
+  if (r2) text += r2.innerText.replace('#', '') + '%0a';
+  if (r3) text += r3.innerText.replace('#', '') + '%0a';
+  text += '%0aנסו גם אתם את השאלון בקישור:%0ahttps://shvushon.github.io/shvushon2/';
+  if (whatsappLink) whatsappLink.setAttribute('href', text);
+};
+
+// Autocomplete
+function autocomplete(inp, arr) {
+  if (!inp) return;
+  let currentFocus = -1;
+
+  inp.addEventListener("input", function() {
+    const val = this.value;
+    closeAllLists();
+    if (!val) return;
+    currentFocus = -1;
+
+    const listDiv = document.createElement("div");
+    listDiv.setAttribute("id", this.id + "autocomplete-list");
+    listDiv.setAttribute("class", "autocomplete-items");
+    this.parentNode.appendChild(listDiv);
+
+    const valUpper = val.toUpperCase();
+    for (let i = 0; i < arr.length; i++) {
+      const matchIndex = arr[i].toUpperCase().indexOf(valUpper);
+      if (matchIndex !== -1) {
+        const itemDiv = document.createElement("div");
+        itemDiv.innerHTML = arr[i].substring(0, matchIndex) +
+          "<strong>" + arr[i].substring(matchIndex, matchIndex + val.length) + "</strong>" +
+          arr[i].substring(matchIndex + val.length);
+        itemDiv.innerHTML += `<input type='hidden' value='${arr[i]}'>`;
+
+        itemDiv.addEventListener("click", function() {
+          inp.value = this.getElementsByTagName("input")[0].value;
+          closeAllLists();
+        });
+        listDiv.appendChild(itemDiv);
+      }
+    }
+  });
+
+  inp.addEventListener("keydown", function(e) {
+    let x = document.getElementById(this.id + "autocomplete-list");
+    if (x) x = x.getElementsByTagName("div");
+    if (e.keyCode === 40) { // Down
+      e.preventDefault();
+      currentFocus++;
+      addActive(x);
+    } else if (e.keyCode === 38) { // Up
+      e.preventDefault();
+      currentFocus--;
+      addActive(x);
+    } else if (e.keyCode === 13) { // Enter
+      e.preventDefault();
+      if (currentFocus > -1 && x && x[currentFocus]) {
+        x[currentFocus].click();
+      }
+    }
+  });
+
+  function addActive(items) {
+    if (!items || items.length === 0) return;
+    removeActive(items);
+    if (currentFocus >= items.length) currentFocus = 0;
+    if (currentFocus < 0) currentFocus = items.length - 1;
+    items[currentFocus].classList.add("autocomplete-active");
+  }
+
+  function removeActive(items) {
+    for (let i = 0; i < items.length; i++) {
+      items[i].classList.remove("autocomplete-active");
+    }
+  }
+
+  function closeAllLists(elmnt) {
+    const items = document.getElementsByClassName("autocomplete-items");
+    for (let i = items.length - 1; i >= 0; i--) {
+      if (elmnt !== items[i] && elmnt !== inp) {
+        items[i].parentNode.removeChild(items[i]);
+      }
+    }
+  }
+
+  document.addEventListener("click", function(e) {
+    closeAllLists(e.target);
+  });
+}
+
+autocomplete(yeshivaInput, yeshivotList);
+
+// Form Validation
+window.validateForm = () => {
+  const isCbChecked = cbInput && cbInput.checked;
+  const isYeshivaValid = yeshivaInput && yeshivotList.includes(yeshivaInput.value.trim());
+  const isShioorSelected = shioorSelect && shioorSelect.value !== "";
+
+  if (isCbChecked || (isYeshivaValid && isShioorSelected)) {
+    window.openConceptsSection();
+  }
+};
